@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
+
+<html> <head> <meta charset = "utf-8"/> <meta http - equiv = "Content-Type"
+content = "text/html;charset=utf-8">
+	
+<script type = "text/javascript">
+	function collapseResults(divName) {
+		document.getElementById(divName).style.display = "none";
+};
+
+var SAMPLE_POST = 'http://www.mapquestapi.com/directions/v2/route?key=YOUR_KEY_HERE&from=MY_HOME&to=MY_WORK&callback=renderNarrative';
+
+function doClick() {
+	document.getElementById('narrative').innerHTML = 'Pending...';
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	var newURL = SAMPLE_POST.replace('YOUR_KEY_HERE', 'tSjaHQ1rpkMBay4jGeUSUzMX30RrQe0S');
+	newURL = newURL.replace('MY_HOME', '985 Rue Lynne, Laval, QC');
+	newURL = newURL.replace('MY_WORK', '4999 Boulevard de Maisonneuve Ouest, Westmount, QC');
+	script.src = newURL;
+	document.body.appendChild(script);
+};
+
+function renderNarrative(response) {
+	var legs = response.route.legs;
+	var html = '';
+	var i = 0;
+	var j = 0;
+	var maneuver;
+
+	html += '<table><tr><th colspan=3>Narrative</th></tr><tbody>'
+
+	for (; i < legs.length; i++) {
+		for (j = 0; j < legs[i].maneuvers.length; j++) {
+			maneuver = legs[i].maneuvers[j];
+
+			html += '<tr>';
+			html += '<td>&nbsp;';
+
+			html += '</td>'
+			html += '<td>' + j.toString() + '. ' + maneuver.narrative + '</td>'
+			html += '<td>'
+			html += '</td>'
+			html += '</tr>';
+		}
+	}
+
+	html += '</tbody></table>';
+
+	document.getElementById('narrative').style.display = "";
+	document.getElementById('narrative').innerHTML = html;
+};
+	
+</script>
+</head> 
+<body> <h2> Home to Work </h2>
+
+<div class="bodyblock">
+    <div class="code" id="basicSampleUrl"></div> <p> <button id = "test1-run"
+onclick = "doClick();"> Run </button>
+    (Route will be displayed below)&nbsp;&nbsp;&nbsp;&nbsp;
+    <button id="collapse-1" onclick="collapseResults('narrative');">
+        Collapse Results
+    </button> </p>
+    <div id="narrative"></div></div>    
+
+<br/>
+
+</body>
+</html>
