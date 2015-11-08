@@ -8,7 +8,7 @@ content = "text/html;charset=utf-8">
 		document.getElementById(divName).style.display = "none";
 };
 
-var SAMPLE_POST = 'http://www.mapquestapi.com/directions/v2/route?key=YOUR_KEY_HERE&from=MY_HOME&to=MY_WORK&callback=renderNarrative';
+var SAMPLE_POST = 'http://www.mapquestapi.com/directions/v2/route?key=YOUR_KEY_HERE&from=MY_HOME&to=MY_WORK&callback=renderNarrative&timeType=1&useTraffic=true'
 
 function doClick() {
 	document.getElementById('narrative').innerHTML = 'Pending...';
@@ -24,41 +24,57 @@ function doClick() {
 function renderNarrative(response) {
 	var legs = response.route.legs;
 	var html = '';
-	var i = 0;
 	var j = 0;
 	var maneuver;
+	var use40 = false;
+	var use20 = false;
+	var routeName;
 
-	html += '<table><tr><th colspan=3>Narrative</th></tr><tbody>'
-
-	for (; i < legs.length; i++) {
-		for (j = 0; j < legs[i].maneuvers.length; j++) {
-			maneuver = legs[i].maneuvers[j];
-
-			html += '<tr>';
-			html += '<td>&nbsp;';
-
-			html += '</td>'
-			html += '<td>' + j.toString() + '. ' + maneuver.narrative + '</td>'
-			html += '<td>'
-			html += '</td>'
-			html += '</tr>';
+	for (j = 0; j < legs[0].maneuvers.length; j++) {
+	
+		maneuver = legs[0].maneuvers[j];
+		
+		if (maneuver.narrative.indexOf('QC-40') > -1) {
+		   use40 = true;
+		   break;
 		}
+		else if (maneuver.narrative.indexOf('QC-20') > -1) {
+         use20 = true;
+         break;
+      }
 	}
-
-	html += '</tbody></table>';
+	
+	if (use40) {
+	   routeName = " on Decarie is ";
+	}
+	else if (use20) {
+	   routeName = " on Highway 20 is ";
+   }
+   else {
+	   routeName = " on Other route is ";
+   }
+	
+	html += '</td>'
+   html += '<td>' + 'Estimated time' + routeName + fromSeconds(response.route.realTime) + '</td>'
+   html += '</tr>';
 
 	document.getElementById('narrative').style.display = "";
 	document.getElementById('narrative').innerHTML = html;
 };
+
+function fromSeconds(sec) {
+   var d=new Date(0,0,0);
+   d.setSeconds(+sec);
+   return (d.getHours() ? d.getHours()+':' : '')+d.getMinutes()+':'+d.getSeconds();
+};
 	
 </script>
 </head> 
-<body> <h2> Home to Work </h2>
+<body> <h2> Best Route </h2>
 
 <div class="bodyblock">
-    <div class="code" id="basicSampleUrl"></div> <p> <button id = "test1-run"
-onclick = "doClick();"> Run </button>
-    (Route will be displayed below)&nbsp;&nbsp;&nbsp;&nbsp;
+    <div class="code" id="basicSampleUrl"></div> <p> <button id = "test1-run" onclick="doClick();"> Home To Work </button>
+              &nbsp;&nbsp;&nbsp;&nbsp;
     <button id="collapse-1" onclick="collapseResults('narrative');">
         Clear results
     </button> </p>
