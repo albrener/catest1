@@ -8,16 +8,25 @@ content = "text/html;charset=utf-8">
 		document.getElementById(divName).style.display = "none";
 };
 
-var SAMPLE_POST = 'http://www.mapquestapi.com/directions/v2/route?key=YOUR_KEY_HERE&from=MY_ORIGIN&to=MY_DESTINATION&callback=renderNarrative&timeType=1&useTraffic=true'
+var SAMPLE_POST = 'http://www.mapquestapi.com/directions/v2/route?key=tSjaHQ1rpkMBay4jGeUSUzMX30RrQe0S&from=MY_ORIGIN&to=MY_DESTINATION&callback=renderNarrative&timeType=1&useTraffic=true'
 
-function doClick() {
+function formatRequest(destination) {
 	document.getElementById('narrative').innerHTML = 'Pending...';
 	var script = document.createElement('script');
 	script.type = 'text/javascript';
-	var newURL = SAMPLE_POST.replace('YOUR_KEY_HERE', 'tSjaHQ1rpkMBay4jGeUSUzMX30RrQe0S');
 
-    newURL = newURL.replace('MY_ORIGIN', '985 Rue Lynne, Laval, QC');
-    newURL = newURL.replace('MY_DESTINATION', '4999 Boulevard de Maisonneuve Ouest, Westmount, QC');
+	var newURL = SAMPLE_POST;
+	
+	if (destination == 1)
+	{
+	   newURL = newURL.replace('MY_ORIGIN', '985 Rue Lynne, Laval, QC');
+	   newURL = newURL.replace('MY_DESTINATION', '4999 Boulevard de Maisonneuve Ouest, Westmount, QC');
+	}
+	else
+	{
+	   newURL = newURL.replace('MY_DESTINATION', '985 Rue Lynne, Laval, QC');
+	   newURL = newURL.replace('MY_ORIGIN', '4999 Boulevard de Maisonneuve Ouest, Westmount, QC');
+	}
 
 	script.src = newURL;
 	document.body.appendChild(script);
@@ -72,12 +81,12 @@ function fromSeconds(sec) {
 	
 </script>
 </head> 
-<body onload="doClick();"> <h2> Best Route </h2>
+<body <h2> Best Route </h2>
 
 <div class="bodyblock">
-    <div class="code" id="basicSampleUrl"></div> <p> 
+    <div class="code" id="basicSampleUrl"></div> <p> <button id = "test1-run" onclick = "collapseResults('narrative');formatRequest(0);"> Work To Home </button>
               &nbsp;&nbsp;&nbsp;&nbsp;
-    <button id="collapse-1" onclick="collapseResults('narrative');doClick();">
+    <button id="collapse-1" onclick="collapseResults('narrative');formatRequest(1);">
         Home To Work
     </button> </p>
     <div id="narrative"></div></div>    
