@@ -61,9 +61,9 @@ function renderNarrative(response) {
    html += '<td>' + phrase + '</td>'
    html += '</tr>';
    
-   var u = new SpeechSynthesisUtterance(phrase);
+   /*var u = new SpeechSynthesisUtterance(phrase);
    u.lang = "en";
-   speechSynthesis.speak(u);
+   speechSynthesis.speak(u);*/
 
 	document.getElementById('narrative').style.display = "";
 	document.getElementById('narrative').innerHTML = html;
@@ -78,3 +78,14 @@ function fromSeconds(sec) {
 function collapseResults(divName) {
 	document.getElementById(divName).style.display = "none";
 };
+
+function sayIt(phrase) {
+	var u = new SpeechSynthesisUtterance(phrase);
+   u.lang = "en";
+   speechSynthesis.speak(u);
+}
+
+
+
+
+
