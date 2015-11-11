@@ -61,9 +61,7 @@ function renderNarrative(response) {
    html += '<td>' + phrase + '</td>'
    html += '</tr>';
    
-   /*var u = new SpeechSynthesisUtterance(phrase);
-   u.lang = "en";
-   speechSynthesis.speak(u);*/
+    sayIt(phrase);
 
 	document.getElementById('narrative').style.display = "";
 	document.getElementById('narrative').innerHTML = html;
