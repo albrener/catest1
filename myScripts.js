@@ -56,9 +56,14 @@ function renderNarrative(response) {
 	   routeName = " on Other route is ";
    }
 	
+	var phrase = 'Estimated time' + routeName + fromSeconds(response.route.realTime);
 	html += '</td>'
-   html += '<td>' + 'Estimated time' + routeName + fromSeconds(response.route.realTime) + '</td>'
+   html += '<td>' + phrase + '</td>'
    html += '</tr>';
+   
+   var u = new SpeechSynthesisUtterance(phrase);
+   u.lang = "en";
+   speechSynthesis.speak(u);
 
 	document.getElementById('narrative').style.display = "";
 	document.getElementById('narrative').innerHTML = html;
@@ -67,7 +72,7 @@ function renderNarrative(response) {
 function fromSeconds(sec) {
    var d=new Date(0,0,0);
    d.setSeconds(+sec);
-   return (d.getHours() ? d.getHours()+':' : '')+d.getMinutes()+':'+d.getSeconds();
+   return (d.getHours() ? d.getHours()+':' : '')+d.getMinutes()+' minutes '+d.getSeconds()+' seconds.';
 };
 
 function collapseResults(divName) {
