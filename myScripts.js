@@ -1,5 +1,16 @@
 
-var SAMPLE_POST = 'http://www.mapquestapi.com/directions/v2/route?key=tSjaHQ1rpkMBay4jGeUSUzMX30RrQe0S&from=MY_ORIGIN&to=MY_DESTINATION&callback=renderNarrative&timeType=1&useTraffic=true'
+var SAMPLE_POST = 'http://www.mapquestapi.com/directions/v2/route?key=tSjaHQ1rpkMBay4jGeUSUzMX30RrQe0S&from=MY_ORIGIN&to=MY_DESTINATION&callback=renderNarrative&timeType=1&useTraffic=true';
+var phrase = 'Estimated time';
+
+function loadData() {
+	var button = document.getElementById('speak');
+
+	var onClick = function() {
+		sayIt(phrase);
+	};
+
+	button.addEventListener('click', onClick, false);
+};
 
 function formatRequest(destination) {
 	document.getElementById('narrative').innerHTML = 'Pending...';
@@ -7,7 +18,7 @@ function formatRequest(destination) {
 	script.type = 'text/javascript';
 
 	var newURL = SAMPLE_POST;
-	
+
 	if (destination == 1)
 	{
 	   newURL = newURL.replace('MY_ORIGIN', '985 Rue Lynne, Laval, QC');
@@ -33,7 +44,7 @@ function renderNarrative(response) {
 	var routeName;
 
 	for (j = 0; j < legs[0].maneuvers.length; j++) {
-	
+
 		maneuver = legs[0].maneuvers[j];
 		
 		if (maneuver.narrative.indexOf('QC-40') > -1) {
@@ -41,46 +52,47 @@ function renderNarrative(response) {
 		   break;
 		}
 		else if (maneuver.narrative.indexOf('QC-20') > -1) {
-         use20 = true;
-         break;
-      }
+		 use20 = true;
+		 break;
+	  }
 	}
-	
+
 	if (use40) {
 	   routeName = " on Decarie is ";
 	}
 	else if (use20) {
 	   routeName = " on Highway 20 is ";
-   }
-   else {
+	}
+	else {
 	   routeName = " on Other route is ";
-   }
+	}
 	
-	var phrase = 'Estimated time' + routeName + fromSeconds(response.route.realTime);
-	html += '</td>'
-   html += '<td>' + phrase + '</td>'
-   html += '</tr>';
+    phrase = phrase + routeName + fromSeconds(response.route.realTime);
+    html += '</td>'
+    html += '<td>' + phrase + '</td>'
+    html += '</tr>';
    
-    sayIt(phrase);
+    //sayIt(phrase);
 
 	document.getElementById('narrative').style.display = "";
 	document.getElementById('narrative').innerHTML = html;
 };
 
 function fromSeconds(sec) {
-   var d=new Date(0,0,0);
-   d.setSeconds(+sec);
-   return (d.getHours() ? d.getHours()+':' : '')+d.getMinutes()+' minutes '+d.getSeconds()+' seconds.';
+	var d=new Date(0,0,0);
+	d.setSeconds(+sec);
+	return (d.getHours() ? d.getHours()+':' : '')+d.getMinutes()+' minutes '+d.getSeconds()+' seconds.';
 };
 
 function collapseResults(divName) {
+	phrase = 'Estimated time';
 	document.getElementById(divName).style.display = "none";
 };
 
 function sayIt(phrase) {
 	var u = new SpeechSynthesisUtterance(phrase);
-   u.lang = "en";
-   speechSynthesis.speak(u);
+	u.lang = "en";
+	speechSynthesis.speak(u);
 }
 
 
